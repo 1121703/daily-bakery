@@ -1,0 +1,456 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>小日嚐烘焙</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="Home_Css.css" rel="stylesheet" media="all">
+    <link href="cake.png" rel="icon">
+</head>
+<body>
+    <nav id="Top">
+        <ul>
+            <a href="#Intro" class="btn" onclick="myFunction('Intro'); return false;"><li>小日嚐簡介</li></a>
+            <a href="#Member" class="btn" onclick="myFunction('Member'); return false;"><li>小日嚐團隊</li></a>
+            <a href="#Report" class="btn" onclick="myFunction('Report'); return false;"><li>財務報表</li></a>
+            <a href="#Respond" class="btn" onclick="myFunction('Respond'); return false;"><li>顧客回應</li></a>
+            <a href="creation.html"><li>產品介紹</li></a>
+            <a href="shop.html"><li>購買商品</li></a>
+            <a href="calender.html"><li>行事曆</li></a>
+        </ul>
+        <a href="#Top"><img src="arrow_Light.png" width="50px" height="50px" id="up"></a>
+    </nav>
+
+    <main>
+        <img src="cake.png" width="100px" height="100px" id="icon">
+        <div id="Intro" class="page">
+            <img src="Generated_Image.jpg" height="900px" width="100%">
+            <h1>【小日嚐烘焙】— 烘焙您日常的溫暖與幸福 </h1>
+            <p>在<strong>【小日嚐烘焙】</strong>，我們相信甜點擁有療癒人心的力量。<br>
+                我們不只是間蛋糕店，更是您社區裡的好鄰居，<br>致力於讓您的<strong>「小日子」</strong>增添一抹甜蜜的色彩。<br>
+                我們堅持<strong>「平價卻不平凡」</strong>的理念，嚴選高品質食材，<br>並大量使用隨季節變換的當季新鮮水果，
+                讓您在對的時節，品嚐到最新鮮的美味。<br>
+                我們不追求繁複華麗的裝飾，而是專注於呈現食材最真實、最純粹的風味。<br>
+                每一塊蛋糕，都乘載著我們對烘焙的熱情與手作的堅持。<br>
+                我們更提供親切的客製化蛋糕服務，希望能將您的心意，化為獨一無二的美味。<br>
+                願<strong>【小日嚐烘焙】</strong>的蛋糕，能以實在的價格，為您帶來滿滿的幸福與愉快。
+            </p>
+        </div>
+
+        <div id="Member" class="page">
+            <h1>小日嚐團隊</h1>
+            
+            <div class="mid">
+                <div id="first">
+                    <h3>翁榆涵 Julia</h3>
+                    <img src="avatar01.jpg" width="150px" height="150px">
+                    <ol>
+                        <li><b>職稱:</b> 店長 兼 客製化溝通師</li>
+                        <li><b>負責項目:</b> 店面營運、顧客接待、客製化蛋糕諮詢與設計</li>
+                        <li><b>個人簡介:</b>「小日嚐」的招牌笑臉 Julia 最擅長耐心傾聽，並將您的故事轉化為獨一無二的蛋糕設計。她最大的成就就是看見您的愉快！</li>
+                    </ol>
+                </div>
+            
+                <div id="second">
+                    <h3>鐘怡婷 Tina</h3>
+                    <img src="avatar02.jpg" width="150px" height="150px">
+                    <ol>
+                        <li><b>職稱:</b> 店長 兼 甜點主廚</li>
+                        <li><b>負責項目:</b> 蛋糕研發、當季水果選材、手作甜點製作</li>
+                        <li><b>個人簡介:</b> Tina 對烘焙充滿熱情，相信手作的溫度能傳遞幸福。她熱愛逛市集，堅持使用最新鮮的當季水果為大家烘焙日常的快樂。</li>
+                    </ol>
+                </div>
+
+                <div id="clear"></div>
+            </div>
+        </div>
+
+        <div id="Report" class="page">
+            <h1>財務報表</h1>
+            
+            <label for="reportYear" class="choose"><b>選擇報表年份:</b></label>
+            <select id="reportYear" onchange="loadReportData(this.value)">
+                <option value="2025">2025 (本年度)</option>
+                <option value="2024">2024 (往年範例)</option>
+            </select>
+            <br><br>
+
+            <div id="financialReportContent">
+                <p>這份摘要展現了我們的穩定性。一個健康的資產結構，代表「小日嚐」有足夠的實力來應對挑戰，並持續為您提供服務。</p>
+                <table border="1" id="upT">
+                    <thead>
+                        <tr>
+                            <th>資產 (我們擁有的)</th>
+                            <th>金額</th>
+                            <th>負債與權益 (我們的資金來源)</th>
+                            <th>金額</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>流動資產</strong> (現金、存貨)</td>
+                            <td id="CA"></td>
+                            <td><strong>流動負債</strong> (應付食材費、薪資)</td>
+                            <td id="CL"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>固定資產</strong> (烤箱、店面裝潢)</td>
+                            <td id="FA"></td>
+                            <td><strong>長期負債</strong> (銀行貸款)</td>
+                            <td id="LL"></td>
+                        </tr>
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td><strong>股東權益</strong> (老闆的投資與淨利)</td>
+                            <td id="SE"></td>
+                        </tr>
+                        <tr class="highlight-final">
+                            <td><strong>總資產</strong></td>
+                            <td id="TA"><strong></strong></td>
+                            <td><strong>總負債與權益</strong></td>
+                            <td id="TLAE"><strong></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="Analysis1"></p>
+                <br>
+    
+                <h2><span id="cashFlowYear">2025</span> 簡易現金流量摘要 (營運活力)</h2>
+                <p>有利潤不等於有現金。「營運現金流」是正數才代表公司真正從「賣蛋糕」這件事上賺到現金，這是維持活力的心臟。</p>
+                <table border="1" id="downT"> 
+                    <thead>
+                        <tr>
+                            <th>項目</th>
+                            <th>說明</th>
+                            <th>年度現金流</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>來自本業的現金流入 (營運現金流)</strong></td>
+                            <td>賣蛋糕實際收到的錢，扣除付給廠商和員工的錢</td>
+                            <td id="OCF"><strong></strong></td>
+                        </tr>
+                        <tr>
+                            <td><strong>來自投資的現金流出 (投資現金流)</strong></td>
+                            <td>例如：購買新的大烤箱</td>
+                            <td id="ICF"></td>
+                        </tr>
+                        <tr>
+                            <td><strong>來自融資的現金流出 (融資現金流)</strong></td>
+                            <td>例如：償還銀行貸款</td>
+                            <td id="FCF"></td>
+                        </tr>
+                        <tr>
+                            <td id="A"></td>
+                            <td id="B"></td>
+                            <td id="NCF"><strong></strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <p id="Analysis2"></p>
+            </div>
+        </div>
+
+        <div id="Respond" class="page">
+            <h1>顧客回應</h1>
+            <button id="clearCommentsBtn" title="清除所有儲存的回饋">清除所有回饋</button>
+            <div id="comment">
+                <p>目前沒有任何回饋。</p>
+            </div>
+
+            <div id="formContainer">
+                <h3>回饋表單</h3>
+                <form id="feedbackForm">
+                    <fieldset>
+                        <legend>基本資料</legend>
+                        <label><b>姓名:</b></label>
+                        <input type="text" id="name" placeholder="匿名" autofocus><br>
+                        <label><b>性別:</b></label>
+                        <input type="radio" id="gender1" name="gender" value="boy" checked>男
+                        <input type="radio" id="gender2" name="gender" value="girl">女
+                        <input type="radio" id="gender3" name="gender" value="hide">不透漏<br>
+                        <label><b>聯絡資訊(e-mail):</b></label><br>
+                        <input type="email" id="email" name="email" size="30" required>
+                    </fieldset>
+                    <fieldset>
+                        <legend>評分</legend>
+                        <label><b>購買商品:</b></label><br>
+                        <input type="checkbox" id="product1" name="product" value="蛋糕">蛋糕
+                        <input type="checkbox" id="product2" name="product" value="達克瓦茲">達克瓦茲
+                        <input type="checkbox" id="product3" name="product" value="餅乾">餅乾
+                        <input type="checkbox" id="product4" name="product" value="千層">千層
+                        <input type="checkbox" id="product5" name="product" value="其他">其他
+                        <input type="text" id="product5_text" name="product_text"><br>
+                        <label><b>商品評價:</b></label>
+                        <select id="evaluation" name="evaluation">
+                            <option value="5">5星</option>
+                            <option value="4">4星</option>
+                            <option value="3">3星</option>
+                            <option value="2">2星</option>
+                            <option value="1">1星</option>
+                        </select>
+                    </fieldset>
+                    <fieldset>
+                        <legend>文字回饋</legend>
+                        <label><b>評論:</b></label><br>
+                        <textarea id="commentText" placeholder="商品都很棒" maxlength="500" required></textarea>
+                    </fieldset>
+                    <input type="submit" id="submitBtn" value="送出回饋">
+                    <input type="reset" id="resetBtn" value="重新填寫">
+                </form>
+            </div>
+        </div>
+    </main>
+
+    <footer>
+        <p>【小日嚐烘培】版權所有非經授權，不得轉載本網站內容。<br>
+            Copyright © 2025 Daily Tastes Bakery. All rights reserved.</p>
+    </footer>
+
+    <script>
+        const allPages = document.querySelectorAll('main .page');
+        function myFunction(pageId) {
+            allPages.forEach(section => {section.style.display = 'none';});
+            const targetPage = document.getElementById(pageId);
+            if (targetPage) {
+                targetPage.style.display = 'block'; 
+                if (pageId === 'Respond') {loadComments();} // 如果切換到 'Respond' 頁面，就載入留言
+                if (pageId === 'Report') { // 新增：如果切換到 'Report' 頁面，確保載入當前選中的年份數據
+                    const currentYear = document.getElementById('reportYear').value;
+                    loadReportData(currentYear);
+                }
+            }
+        }
+
+        // 財務數據的物件
+        const financialData = {
+            '2025': {
+                CA: 1000000, // 流動資產
+                CL: 400000,  // 流動負債
+                FA: 1200000, // 固定資產
+                LL: 500000,  // 長期負債
+                SE: 1300000, // 股東權益
+                OCF: 550000, // 營運現金流
+                ICF: 300000, // 投資現金流
+                FCF: 200000  // 融資現金流
+            },
+            '2024': { // 往年範例數據
+                CA: 800000,  
+                CL: 350000,  
+                FA: 1000000, 
+                LL: 600000,  
+                SE: 850000,  
+                OCF: 450000, 
+                ICF: 200000, 
+                FCF: 200000  
+            }
+        };
+
+        // 函數：載入並計算指定年份的報表數據
+        window.loadReportData = function(year) {
+            const data = financialData[year];
+
+            if (!data) return; // 如果年份數據不存在，則退出
+
+            // 1. 資產負債表計算
+            const TA = data.CA + data.FA; // 總資產
+            const TLAE = data.CL + data.LL + data.SE; // 總負債與權益
+            
+            // 2. 現金流量表計算
+            const NCF = data.OCF - data.ICF - data.FCF;
+
+            // 3. 更新 DOM
+            document.getElementById("CA").innerHTML = `$` + data.CA;
+            document.getElementById("CL").innerHTML = `$` + data.CL;
+            document.getElementById("FA").innerHTML = `$` + data.FA;
+            document.getElementById("LL").innerHTML = `$` + data.LL;
+            document.getElementById("SE").innerHTML = `$` + data.SE;
+            document.getElementById("TA").innerHTML = `$` + TA;
+            document.getElementById("TLAE").innerHTML = `$` + TLAE;
+            
+            document.getElementById("OCF").innerHTML = `$` + data.OCF;
+            document.getElementById("ICF").innerHTML = `-$` + data.ICF;
+            document.getElementById("FCF").innerHTML = `-$` + data.FCF;
+            document.getElementById("NCF").innerHTML = `$` + NCF;
+
+            // 4. 更新現金流量表標題年份
+            document.getElementById("cashFlowYear").textContent = year;
+
+            // 5. 資產負債表分析
+            if(data.CA > data.CL){
+                document.getElementById("Analysis1").innerHTML = `<b>健康分析：</b>
+                我們的流動資產($${data.CA})大於流動負債($${data.CL})，代表我們的短期償債能力非常安全，付得出薪水與貨款！`
+            } else {
+                document.getElementById("Analysis1").innerHTML = `<b>健康警示：(</b>
+                我們的流動資產($${data.CA})小於流動負債($${data.CL})，代表短期償債能力吃緊，我們會密切注意現金流！`
+            }
+
+            // 6. 現金流量表分析
+            if(NCF > 0){
+                document.getElementById("A").innerHTML = `<strong>本年度現金淨增加</strong>`
+                document.getElementById("B").innerHTML = `營運賺的錢 > 投資 + 還款`
+                document.getElementById("Analysis2").innerHTML = `<b>健康分析：</b>我們的營運現金流($${data.OCF})
+                非常強勁！這筆錢足以支付我們購買新烤箱 (投資) 和償還貸款 (融資) 的費用，年底銀行存款還能增加($${NCF})。`
+            } else {
+                document.getElementById("A").innerHTML = `<strong>本年度現金淨減少</strong>`
+                document.getElementById("B").innerHTML = `營運賺的錢 < 投資 + 還款`
+                document.getElementById("Analysis2").innerHTML = `<b>健康警示：</b>我們的營運現金流($${data.OCF})
+                雖然營運現金流強勁，但不足以支付投資與融資的費用，導致年底銀行存款減少了($${NCF})!我們會更謹慎規劃現金支出。`
+            }
+
+            // 7. 重新執行數字格式化（逗號分隔）
+            formatFinancialNumbers();
+        }
+
+        // 數字格式化函數 (保持原有的邏輯)
+        const idList = ["CA", "CL", "FA", "LL", "SE", "TA", "TLAE", "OCF", "ICF", "FCF", "NCF"];
+        function formatNumberString(str) {
+            const parts = str.match(/^(-?\$)(.*)/); 
+            if (!parts) return str;
+
+            const prefix = parts[1];
+            const number = parts[2];
+            const formattedNumber = number.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+            return prefix + formattedNumber;
+        }
+
+        function formatFinancialNumbers() {
+            idList.forEach(id => {
+                const el = document.getElementById(id);
+                if (el) {
+                    const originalText = el.innerHTML;
+                    const formattedText = formatNumberString(originalText);
+                    el.innerHTML = formattedText;
+                }
+            });
+
+            const analysis1 = document.getElementById("Analysis1");
+            const analysis2 = document.getElementById("Analysis2");
+            
+            if (analysis1) {
+                analysis1.innerHTML = analysis1.innerHTML.replace(/\(\$([\d,]+)\)/g, (match, number) => {
+                    return `(\$${number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')})`;
+                });
+            }
+
+            if (analysis2) {
+                analysis2.innerHTML = analysis2.innerHTML.replace(/\(\$([\d,]+)\)/g, (match, number) => {
+                    return `(\$${number.replace(/\B(?=(\d{3})+(?!\d))/g, ',')})`;
+                });
+            }
+        }
+    </script>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const feedbackForm = document.getElementById('feedbackForm');
+            const commentDiv = document.getElementById('comment');
+            const storageKey = 'bakeryComments';
+
+            const clearBtn = document.getElementById('clearCommentsBtn');
+
+            if (clearBtn) {
+                clearBtn.addEventListener('click', () => {
+                    localStorage.removeItem(storageKey);
+                    loadComments();
+                });
+            }
+
+            window.loadComments = function() {
+                const comments = JSON.parse(localStorage.getItem(storageKey)) || [];
+                commentDiv.innerHTML = '';
+                if (comments.length === 0) {
+                    commentDiv.innerHTML = '<p>目前沒有任何回饋。</p>';
+                    return;
+                }
+
+                comments.forEach(comment => {
+                    const productString = comment.products.join('、') || '無';
+                    const time = new Date(comment.timestamp);
+                    const formattedTime = time.toLocaleString('zh-TW', {
+                        year: 'numeric', 
+                        month: 'long', 
+                        day: 'numeric', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                    });
+
+                    const commentHTML = `
+                        <div class="comment-entry">
+                            <div class="head"><strong>${comment.name}</strong><i>${formattedTime}</i></div>
+                            <p>${comment.comment}</p>
+                            <ul>
+                                <li><b>購買商品:</b> ${productString}</li>
+                                <li><b>商品評價:</b> ${comment.rating} 星</li>
+                            </ul>
+                        </div>
+                    `;
+                    
+                    commentDiv.insertAdjacentHTML('afterbegin', commentHTML);
+                });
+            }
+
+            if (feedbackForm) {
+                feedbackForm.addEventListener('submit', (event) => {
+                    event.preventDefault();
+
+                    const time = new Date().toISOString();
+                    const name = document.getElementById('name').value || '匿名';
+                    const gender = document.querySelector('input[name="gender"]:checked').value;
+                    const email = document.getElementById('email').value;
+                    const rating = document.getElementById('evaluation').value;
+                    const commentText = document.getElementById('commentText').value;
+                    
+                    const selectedProducts = [];
+                    const productCheckboxes = document.querySelectorAll('input[name="product"]:checked');
+                    
+                    productCheckboxes.forEach(cb => {
+                        if (cb.id === 'product5') {
+                            const otherText = document.getElementById('product5_text').value;
+                            selectedProducts.push(otherText || '其他');
+                        } else {selectedProducts.push(cb.value);}
+                    });
+
+                    const newComment = {
+                        name: name,
+                        gender: gender,
+                        email: email,
+                        products: selectedProducts,
+                        rating: rating,
+                        comment: commentText,
+                        timestamp: new Date().toISOString()
+                    };
+
+                    let comments = JSON.parse(localStorage.getItem(storageKey)) || [];
+                    comments.push(newComment);
+                    localStorage.setItem(storageKey, JSON.stringify(comments));
+
+                    loadComments();
+                    feedbackForm.reset();
+                });
+            }
+
+            function handlePageLoad() {
+                let hash = window.location.hash;
+                if (hash) {
+                    const pageId = hash.substring(1);
+                    const targetPage = document.getElementById(pageId);
+                    
+                    if (targetPage && targetPage.classList.contains('page')) {
+                        myFunction(pageId);
+                        return;
+                    }
+                }
+                
+                // 預設載入 'Intro'，並確保在 'Report' 頁面時載入 2025 年數據
+                myFunction('Intro'); 
+                loadReportData('2025'); // 確保一開始就載入 2025 年的數據並格式化
+            }
+
+            handlePageLoad();
+        });
+    </script>
+</body>
+</html>

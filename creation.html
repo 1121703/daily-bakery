@@ -1,0 +1,339 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>產品介紹及下單</title>
+    <link href="cake.png" rel="icon">
+    <style>
+        main #icon {
+            position: fixed;
+            top: 5px;
+            right: 5px;
+            z-index: 3;
+        }
+        /* (基本樣式... 與上次相同) */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; padding: 0; background-color: #fdfaf6; }
+        .container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+        header { text-align: center; margin-bottom: 40px; }
+        header h1 { font-size: 2.5em; color: #8b4513; font-weight: 300; }
+        .product-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 30px; }
+        .product-card { background-color: #ffffff; border-radius: 12px; box-shadow: 0 6px 12px rgba(0, 0, 0, 0.08); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s, box-shadow 0.3s; }
+        .product-card:hover { transform: translateY(-5px); box-shadow: 0 10px 20px rgba(0, 0, 0, 0.12); }
+        .product-image { width: 100%; height: 350px; object-fit: cover; }
+        .product-info { padding: 20px; flex-grow: 1; display: flex; flex-direction: column; }
+        .product-info h3 { margin-top: 0; margin-bottom: 10px; font-size: 1.4em; color: #333; }
+        .product-info .description { font-size: 0.9em; color: #666; line-height: 1.5; flex-grow: 1; margin-bottom: 15px; }
+        .product-price { font-size: 1.5em; font-weight: bold; color: #d9534f; margin-bottom: 15px; }
+        .add-to-cart-btn { display: block; width: 100%; padding: 12px; background-color: rgb(252, 240, 209); color: black; text-align: center; border: none; border-radius: 8px; font-size: 1em; font-weight: bold; cursor: pointer; transition: background-color 0.3s, opacity 0.3s; }
+        .add-to-cart-btn:hover { background-color: rgb(252, 240, 209); }
+        .add-to-cart-btn.added { background-color: rgb(252, 240, 209); opacity: 0.8; }
+
+        /* --- 結帳區塊樣式 (更新) --- */
+        .checkout-link-wrapper {
+            text-align: center;
+            margin-top: 40px;
+            /* (新增) 使用 Flexbox 來並排兩個按鈕 */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 20px; /* 按鈕間距 */
+        }
+        .checkout-link {
+            display: inline-block;
+            padding: 15px 40px;
+            font-size: 1.2em;
+            font-weight: bold;
+            color: black;
+            background-color: rgb(252, 240, 209);
+            border-radius: 10px;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        .checkout-link:hover { background-color: rgb(252, 240, 209); }
+
+        /* (新增) 清空購物車按鈕的樣式 */
+        .clear-cart-button {
+            display: inline-block;
+            padding: 12px 20px;
+            font-size: 1em;
+            color: #777;
+            background-color: #f0f0f0;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        .clear-cart-button:hover {
+            background-color: #e0e0e0;
+        }
+        /* 2. 側邊選單 (Sidenav) 的主要樣式 */
+    .sidenav {
+        height: 100%; /* 佔滿整個螢幕高度 */
+        width: 250px; /* 選單寬度 */
+        position: fixed; /* 固定在螢幕上，即使滾動也不會動 */
+        z-index: 1; /* 確保在最上層 */
+        top: 0;
+        left: -250px; /* 關鍵：預設藏在螢幕左邊 -250px 的位置 */
+        background-color: rgb(252, 240, 209); /* 背景色 */
+        overflow-x: hidden; /* 隱藏水平滾動條 */
+        padding-top: 60px; /* 頂部留白 */
+        transition: 0.5s; /* 關鍵：設定 "left" 屬性的過渡動畫，持續 0.5 秒 */
+    }
+
+    /* 3. 選單內的連結樣式 */
+    .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 22px;
+        color: black;
+        display: block;
+        transition: 0.3s;
+    }
+
+    /* 4. 連結的滑鼠懸停 (hover) 效果 */
+    .sidenav a:hover {
+        color: DimGray;
+    }
+
+    /* 5. 關閉按鈕 (X) 的樣式 */
+    .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+    }
+    
+    /* 6. 用來推開主要內容的樣式 (可選) */
+    /* 當 .sidenav-open 被加到 body 上時... */
+    body.sidenav-open {
+        margin-left: 250px; /* 把 body 往右推 250px */
+        color:#8b4513;
+    }
+    </style>
+</head>
+<body>
+    <main><img src="cake.png" width="100px" height="100px" id="icon"></main>
+    <span style="font-size:30px; cursor:pointer;" id="openBtn">&#9776; MENU</span>
+    <div id="mySidenav" class="sidenav">
+        <a href="javascript:void(0)" class="closebtn" id="closeBtn">&times;</a>
+        <a href="index.html#Intro">小日嚐簡介</a>
+        <a href="index.html#Member">小日嚐團隊</a>
+        <a href="index.html#Report">財務報表</a>
+        <a href="index.html#Respond">顧客回應</a>
+        <a href="creation.html">產品介紹</a>
+        <a href="shop.html">購買商品</a>
+        <a href="calender.html">行事曆</a>
+    </div>
+    <div class="container">
+        <header>
+            <h1>我們的甜點</h1>
+        </header>
+
+        <main>
+            <section class="product-grid">
+                <article class="product-card">
+                    <img src="strawberrycake.jpg" alt="草莓伯爵奶茶戚風(6吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>草莓伯爵奶茶戚風(6吋)</h3>
+                        <p class="description">綿密的伯爵茶香戚風蛋糕
+                            <br>內餡是香甜的卡士達奶油夾心和新鮮草莓
+                            <br>外圈抹上伯爵茶香緹有著濃郁的奶茶香氣
+                            <br>是草莓控和奶茶控的夢幻甜點</p>
+                        <div class="product-price" data-price="1000">$NT 1000</div>
+                        <button class="add-to-cart-btn" data-id="p1" data-name="草莓伯爵奶茶戚風(6吋)" data-price="1000">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="Dacwaz.jpg" alt="達克瓦茲9入組" class="product-image">
+                    <div class="product-info">
+                        <h3>達克瓦茲9入組</h3>
+                        <p class="description">酒櫻可可風味*3,莓果派對風味*3,開心果口味*3</p>
+                        <div class="product-price" data-price="720">$NT 720</div>
+                        <button class="add-to-cart-btn" data-id="p2" data-name="達克瓦茲9入組" data-price="720">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="handmadecookie.jpg" alt="手工餅乾禮盒" class="product-image">
+                    <div class="product-info">
+                        <h3>手工餅乾禮盒</h3>
+                        <p class="description">法式奶香酥餅*6、焦糖香酥椰子*6、<br>黃金蜂蜜柚子*8、黑胡椒莓果*8、
+                            <br>特選日式抹茶*8、帕瑪森起司*8、<br>鹽之花巧克力*6、白巧克力椰香*6</p>
+                        <div class="product-price" data-price="600">$NT 600</div>
+                        <button class="add-to-cart-btn" data-id="p3" data-name="手工餅乾禮盒" data-price="600">加入購物車</button>
+                    </div>
+                </article>
+            </section>
+
+            <section class="product-grid">
+                <article class="product-card">
+                    <img src="OriginalCrepeCake.jpg" alt="原味千層(8吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>原味千層(8吋)</h3>
+                        <p class="description">數十層手工薄餅皮，與輕盈的香草鮮奶油完美交織。
+                            <br>口感細緻滑順，入口即化，散發純粹奶香。</p>
+                        <div class="product-price" data-price="1380">$NT 1380</div>
+                        <button class="add-to-cart-btn" data-id="p4" data-name="原味千層(8吋)" data-price="1380">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="Matchacake.jpg" alt="抹茶千層(8吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>抹茶千層(8吋)</h3>
+                        <p class="description">嚴選日本抹茶粉，融入滑順鮮奶油。
+                            <br>手工餅皮堆疊出細緻口感，每一口都是濃郁茶香<br>與微苦甘醇的完美平衡。</p>
+                        <div class="product-price" data-price="1380">$NT 1380</div>
+                        <button class="add-to-cart-btn" data-id="p5" data-name="抹茶千層(8吋)" data-price="1380">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="teacake.jpg" alt="伯爵茶千層(8吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>伯爵茶千層(8吋)</h3>
+                        <p class="description">伯爵茶融入滑順鮮奶油，塗在餅皮間。
+                            <br>茶香濃郁，尾韻散發優雅的柑橘清香。</p>
+                        <div class="product-price" data-price="1380">$NT 1380</div>
+                        <button class="add-to-cart-btn" data-id="p6" data-name="伯爵茶千層(8吋)" data-price="1380">加入購物車</button>
+                    </div>
+                </article>
+            </section>
+
+            <section class="product-grid">
+                <article class="product-card">
+                    <img src="grape.jpg" alt="葡萄森丘(2入組)" class="product-image">
+                    <div class="product-info">
+                        <h3>葡萄森丘(2入組)</h3>
+                        <p class="description">選用香甜多汁的加州陽光綠葡萄，清爽細緻的大吉嶺卡士達醬搭配香氣獨特的伯爵茶蛋糕體，融合成清爽又濃醇的奶茶口感。</p>
+                        <div class="product-price" data-price="450">$NT 450</div>
+                        <button class="add-to-cart-btn" data-id="p7" data-name="葡萄森丘(2入組)" data-price="450">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="fruit.jpg" alt="巧克力水果生乳捲" class="product-image">
+                    <div class="product-info">
+                        <h3>巧克力水果生乳捲</h3>
+                        <p class="description">苦甜巧克力捲入繽紛的新鮮水果,雙重享受不甜膩</p>
+                        <div class="product-price" data-price="760">$NT 760</div>
+                        <button class="add-to-cart-btn" data-id="p8" data-name="巧克力水果生乳捲" data-price="760">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="strawberry.jpg" alt="草莓生乳捲" class="product-image">
+                    <div class="product-info">
+                        <h3>草莓生乳捲</h3>
+                        <p class="description">【請注意】因草莓為新鮮季節性水果，可能會因氣候因素導致缺貨情況，下訂後若有任何問題將以電子郵件聯繫，請務必留意信箱。</p>
+                        <div class="product-price" data-price="760">$NT 760</div>
+                        <button class="add-to-cart-btn" data-id="p9" data-name="草莓生乳捲" data-price="760">加入購物車</button>
+                    </div>
+                </article>
+            </section>
+
+            <section class="product-grid">
+                <article class="product-card">
+                    <img src="Tiramisu.jpg" alt="提拉米蘇生乳捲" class="product-image">
+                    <div class="product-info">
+                        <h3>提拉米蘇生乳捲</h3>
+                        <p class="description">提拉米蘇咖啡捲帶有淡淡酒香氣<br>外層厚厚的可可粉，灑好灑滿。<br>入口即化，多了苦甜的層次感</p>
+                        <div class="product-price" data-price="720">$NT 720</div>
+                        <button class="add-to-cart-btn" data-id="p10" data-name="提拉米蘇生乳捲" data-price="720">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="cococheese.jpg" alt="可可起司蛋糕(5吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>可可起司蛋糕(5吋)</h3>
+                        <p class="description">濃郁的可可香氣和乳酪香氣交織<br>甜而不膩又充滿驚喜</p>
+                        <div class="product-price" data-price="680">$NT 680</div>
+                        <button class="add-to-cart-btn" data-id="p11" data-name="可可起司蛋糕(5吋)" data-price="680">加入購物車</button>
+                    </div>
+                </article>
+                <article class="product-card">
+                    <img src="lemoncheese.jpg" alt="檸檬起司蛋糕(5吋)" class="product-image">
+                    <div class="product-info">
+                        <h3>檸檬起司蛋糕(5吋)</h3>
+                        <p class="description">柔順綿密的口感，帶有檸檬的酸甜香氣<br>堆疊出富有層次感的滿足</p>
+                        <div class="product-price" data-price="680">$NT 680</div>
+                        <button class="add-to-cart-btn" data-id="p12" data-name="檸檬起司(5吋)" data-price="680">加入購物車</button>
+                    </div>
+                </article>
+            </section>
+            
+            <div class="checkout-link-wrapper">
+                <button id="clear-cart-btn" class="clear-cart-button">清空購物車</button>
+                <a href="shop.html" class="checkout-link">前往結帳 (<span id="cart-count">0</span>)</a>
+            </div>
+        </main>
+    </div>
+
+    <script src="cart.js"></script>
+    <script>
+        // --- 這是 shop.js 的內容 ---
+
+        // 取得所有的「加入購物車」按鈕
+        const allAddButtons = document.querySelectorAll('.add-to-cart-btn');
+        const cartCountSpan = document.getElementById('cart-count');
+        
+        // (新增) 取得清空購物車按鈕
+        const clearCartBtn = document.getElementById('clear-cart-btn');
+
+        // 更新購物車圖示的數量
+        function updateCartCount() {
+            const cart = Cart.get();
+            let totalCount = 0;
+            cart.forEach(item => {
+                totalCount += item.quantity;
+            });
+            cartCountSpan.textContent = totalCount;
+        }
+
+        // 為每個按鈕添加點擊事件
+        allAddButtons.forEach(button => {
+            button.addEventListener('click', () => {
+                // (...點擊加入的邏G輯... 與上次相同)
+                const id = button.dataset.id;
+                const name = button.dataset.name;
+                const price = parseInt(button.dataset.price);
+                Cart.add(id, name, price);
+                button.textContent = '已加入！';
+                button.classList.add('added');
+                setTimeout(() => {
+                    button.textContent = '加入購物車';
+                    button.classList.remove('added');
+                }, 1500);
+                updateCartCount();
+            });
+        });
+
+        // (新增) 為清空按鈕添加點擊事件
+        clearCartBtn.addEventListener('click', () => {
+            // 增加一個確認彈窗，防止誤觸
+            if (confirm('您確定要清空所有購物車商品嗎？')) {
+                Cart.clear();
+                updateCartCount(); // 更新數字為 0
+            }
+        });
+
+        // 取得我們要操作的 HTML 元素
+        const openBtn = document.getElementById("openBtn");
+        const closeBtn = document.getElementById("closeBtn");
+        const sidenav = document.getElementById("mySidenav");
+        const bodyEl = document.body; // 取得 body 元素
+
+    // 當「開啟按鈕」被點擊時
+        openBtn.addEventListener("click", function() {
+            sidenav.style.left = "0"; // 將選單的 left 設為 0 (滑出來)
+            bodyEl.classList.add("sidenav-open"); // 在 body 加上 class，讓內容往右推
+        });
+
+    // 當「關閉按鈕」被點擊時
+        closeBtn.addEventListener("click", function() {
+            sidenav.style.left = "-250px"; // 將選單的 left 設回 -250px (藏回去)
+            bodyEl.classList.remove("sidenav-open"); // 移除 class，讓內容歸位
+        });
+
+        // 頁面載入時，也更新一次數量
+        updateCartCount();
+    </script>
+</body>
+</html>

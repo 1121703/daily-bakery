@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>結帳</title>
+    <link href="cake.png" rel="icon">
+    <style>
+        main #icon {
+            position: fixed;
+            top: 5px;
+            right: 5px;
+            z-index: 3;
+        }
+        /* (基本樣式... 與上次相同) */
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; margin: 0; background-color: #f9f9f9; color: #333; font-size: 16px; }
+        .container { max-width: 1100px; margin: 40px auto; padding: 20px; grid-area: container;}
+        .checkout-layout { display: grid; grid-template-columns: 2fr 1fr; gap: 40px; }
+        .form-section { background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); }
+        .order-summary { background-color: #ffffff; padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0,0,0,0.05); position: sticky; top: 40px; }
+        h2 { font-size: 1.8em; color: black; margin-top: 0; margin-bottom: 25px; border-bottom: 2px solid #f0f0f0; padding-bottom: 10px; }
+        fieldset { border: none; padding: 0; margin: 0 0 30px 0; }
+        legend { font-size: 1.3em; font-weight: 600; margin-bottom: 15px; padding: 0; }
+        .form-group { margin-bottom: 20px; }
+        .form-group label { display: block; font-weight: 600; margin-bottom: 8px; font-size: 0.9em; }
+        .form-group input[type="text"], .form-group input[type="email"], .form-group input[type="tel"] { width: 100%; padding: 12px; border: 1px solid #ccc; border-radius: 8px; box-sizing: border-box; font-size: 1em; }
+        .form-row { display: flex; gap: 20px; }
+        .form-row .form-group { flex: 1; }
+        .summary-item { display: flex; justify-content: space-between; margin-bottom: 15px; font-size: 0.95em; }
+        .summary-item .item-name { color: #555; }
+        .summary-item .item-price { font-weight: 600; }
+        .summary-total { margin-top: 25px; padding-top: 20px; border-top: 2px solid #f0f0f0; display: flex; justify-content: space-between; font-size: 1.4em; font-weight: bold; color: #333; }
+        .checkout-btn { display: block; width: 100%; padding: 18px; background-color: rgb(252, 240, 209); color: black; text-align: center; border: none; border-radius: 8px; font-size: 1.2em; font-weight: bold; cursor: pointer; transition: background-color 0.3s; margin-top: 30px; }
+        .checkout-btn:hover { background-color: rgb(252, 240, 209); }
+        .empty-cart-message { color: #888; text-align: center; padding: 40px 0; }
+        
+        /* (新增) 清空購物車的文字連結樣式 */
+        .clear-cart-text-link {
+            display: block;
+            text-align: right;
+            font-size: 0.9em;
+            color: #d9534f;
+            text-decoration: none;
+            margin-top: -15px; /* 往上拉近標題 */
+            margin-bottom: 15px;
+        }
+        .clear-cart-text-link:hover {
+            text-decoration: underline;
+        }
+
+        @media (max-width: 800px) {
+            .checkout-layout { grid-template-columns: 1fr; }
+        }
+
+        .page-wrapper {
+            display: grid;
+            grid-template-columns: 220px 1fr;
+            grid-template-areas:"sidebar container";
+        }
+
+        .sidebar {
+            grid-area: sidebar;
+            height: 100vh;
+            background-color: rgb(252, 240, 209); /* 背景色 */
+            overflow-x: hidden; /* 隱藏水平捲軸 */
+            padding-top: 20px;
+
+            position: sticky;
+        }
+
+        /* 3. 選單連結的樣式 */
+        .sidebar a {
+            padding: 10px 15px;
+            text-decoration: none; /* 移除底線 */
+            font-size: 18px;
+            color: black;
+            display: block; /* 讓連結變成區塊，佔滿整行 */
+            transition: 0.3s; /* 滑鼠移過的漸變效果 */
+        }
+
+        /* 4. 滑鼠移過 (hover) 的效果 */
+        .sidebar a:hover {
+            background-color: rgb(252, 240, 209);
+            color: black;
+        }
+        @media (max-width: 800px) {
+            .sidebar {
+            /* 讓側邊欄寬度變 0，把它藏起來 */
+            width: 0; 
+            /* 你也可以用 display: none; 但 width: 0; 可以搭配 transition 動畫 */
+            }
+
+           .main-content {
+            /* * 同時，讓主要內容的 margin-left 歸零，
+            * 這樣它就能佔滿整個螢幕寬度。
+            */
+            margin-left: 0; 
+            }
+        }
+    </style>
+</head>
+<body>
+    <main><img src="cake.png" width="100px" height="100px" id="icon"></main>
+    <div class="page-wrapper">
+    <div class="sidebar">
+        <a href="index.html#Intro">小日嚐簡介</a>
+        <a href="index.html#Member">小日嚐團隊</a>
+        <a href="index.html#Report">財務報表</a>
+        <a href="index.html#Respond">顧客回應</a>
+        <a href="creation.html">產品介紹</a>
+        <a href="shop.html">購買商品</a>
+        <a href="calender.html">行事曆</a>
+    </div>
+
+    <div class="container">
+        
+        <form id="checkout-form">
+            <div class="checkout-layout">
+                
+                <section class="form-section">
+                    <fieldset>
+                        <legend>聯絡資訊</legend>
+                        <div class="form-group">
+                            <label for="email">電子郵件</label>
+                            <input type="email" id="email" name="email" required>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>訂購資訊</legend>
+                        <div class="form-row">
+                            <div class="form-group"><label for="first-name">姓氏</label><input type="text" id="first-name" name="first_name" required></div>
+                            <div class="form-group"><label for="last-name">名字</label><input type="text" id="last-name" name="last_name" required></div>
+                        </div>
+                    </fieldset>
+                    <fieldset>
+                        <legend>付款資訊</legend>
+                         <div class="form-group">門市取貨付款<br>門市地址:桃園市中壢區遠東路135號</div>
+                    </fieldset>
+
+                    <fieldset>
+                        <legend>取貨時間</legend>
+                         <div class="form-group">
+                         <label for="pickup-date">請選擇取貨日期：</label>
+                         <input type="date" id="pickup-date" name="pickup-date" required>
+                         </div>
+                    </fieldset>
+                </section>
+
+                <aside class="order-summary">
+                    <h2>訂單摘要</h2>
+                    
+                    <a href="#" id="clear-cart-link" class="clear-cart-text-link">清空購物車</a>
+                    
+                    <div id="summary-items-container">
+                        </div>
+                    <div id="summary-total-container">
+                        </div>
+
+                    <button type="submit" class="checkout-btn">
+                        下單購買
+                    </button>
+                </aside>
+
+            </div>
+        </form>
+    </div>
+    </div>
+
+    <script src="cart.js"></script>
+    <script>
+        // --- 這是 checkout.js 的內容 ---
+        document.addEventListener('DOMContentLoaded', () => {
+            
+            const itemsContainer = document.getElementById('summary-items-container');
+            const totalContainer = document.getElementById('summary-total-container');
+            const checkoutForm = document.getElementById('checkout-form');
+            const orderSummarySection = document.querySelector('.order-summary');
+            
+            // (新增) 取得清空連結
+            const clearCartLink = document.getElementById('clear-cart-link');
+
+            let subtotal = 0;
+
+            // 1. 從 cart.js 取得購物車資料
+            const cart = Cart.get();
+
+            if (cart.length === 0) {
+                // (如果購物車是空的...)
+                orderSummarySection.innerHTML = `
+                    <h2>訂單摘要</h2>
+                    <p class="empty-cart-message">您的購物車是空的。</p>
+                    <a href="creation.html" style="text-decoration: none;">
+                        <button type="button" class="checkout-btn">回去商店</button>
+                    </a>
+                `;
+                document.querySelector('.form-section').style.opacity = '0.5';
+                document.querySelector('.form-section').style.pointerEvents = 'none';
+            } else {
+                // 2. (如果購物車有東西，動態建立 HTML...)
+                cart.forEach(item => {
+                    const itemDiv = document.createElement('div');
+                    itemDiv.classList.add('summary-item');
+                    const itemName = `${item.name} x ${item.quantity}`;
+                    const itemPrice = item.price * item.quantity;
+                    itemDiv.innerHTML = `<span class="item-name">${itemName}</span><span class="item-price">$NT ${itemPrice}</span>`;
+                    itemsContainer.appendChild(itemDiv);
+                    subtotal += itemPrice;
+                });
+
+                // 3. (顯示總計...)
+                const total = subtotal ;
+                totalContainer.innerHTML = `
+                    <div class="summary-total"><span>總計</span><span>$NT ${total}</span></div>
+                `;
+
+                // (新增) 綁定清空連結的點擊事件
+                clearCartLink.addEventListener('click', (e) => {
+                    e.preventDefault(); // 阻止連結的預設跳轉行為
+                    if (confirm('您確定要清空所有購物車商品嗎？')) {
+                        Cart.clear();
+                        // 重新載入此頁面，頁面會自動執行 "購物車是空的" 邏輯
+                        window.location.reload(); 
+                    }
+                });
+            }
+            
+            // 4. (處理表單提交... 與上次相同)
+            checkoutForm.addEventListener('submit', (event) => {
+                event.preventDefault(); 
+                if (cart.length === 0) {
+                    alert("您的購物車是空的，無法結帳。");
+                    return;
+                }
+                alert("感謝您的購買！您的訂單已成功送出。");
+                Cart.clear();
+                window.location.href = "creation.html";
+            });
+        });
+        document.addEventListener('DOMContentLoaded', function() {
+        
+        // --- 核心邏輯：設定最小可選日期 ---
+
+        // 1. 獲取今天的日期
+        const today = new Date();
+        
+        // 2. 建立一個新日期物件，並將日期設為 3 天後
+        const minPickupDate = new Date();
+        minPickupDate.setDate(today.getDate() + 3);
+
+        // 3. 將 3 天後的日期格式化為 "YYYY-MM-DD"
+        //    這是 <input type="date"> 的 min 屬性唯一接受的格式
+        const year = minPickupDate.getFullYear();
+        // getMonth() 返回 0-11，所以要 +1。padStart 確保月份是 2 位數 (例如 05)
+        const month = String(minPickupDate.getMonth() + 1).padStart(2, '0');
+        // getDate() 返回 1-31。padStart 確保日期是 2 位數
+        const day = String(minPickupDate.getDate()).padStart(2, '0');
+        
+        const minDateString = `${year}-${month}-${day}`;
+
+        // 4. 找到 input 元素，並設定其 min 屬性
+        const dateInput = document.getElementById('pickup-date');
+        
+        if (dateInput) {
+            dateInput.min = minDateString;
+            
+            // (可選) 預設將 input 的值也設為 3 天後
+            // dateInput.value = minDateString;
+        }
+    });
+    </script>
+</body>
+</html>
