@@ -2,7 +2,7 @@
 
 > 一間溫暖且注重細節的手作甜點烘焙線上展示平台，運用現代前端技術呈現優雅、直覺且具備響應式體驗的購物空間。
 
-🔗 **線上展示網址 (Live Demo)**: [點此立即造訪小日嚐烘焙網站](https://1121703.github.io/Daily-Bakery/) *(請在開啟 GitHub Pages 後替換)*  
+🔗 **線上展示網址 (Live Demo)**: [點此立即造訪小日嚐烘焙網站](https://script.google.com/macros/s/AKfycbxYRqDobaf4ujkPDyabknMUEx_EPMEyzZ3KEbQ4a-1KAeFDlQP2LIS9igrqYvUqtgOtPQ/exec) 
 📊 **專案簡報連結**: [Canva 簡報展示](https://canva.link/p21898kr3q1rxus)
 
 ---
